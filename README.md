@@ -16,6 +16,27 @@ WayBak is a utility script designed for backing up and restoring Waydroid data. 
 - Waydroid must be installed and set up on your system.
 - Root permissions are required to perform the backup and restore operations.
 
+## Setup
+1. Clone the repository:
+   ```
+   git clone https://github.com/berndhofer/waybak.git
+   ```
+2. Navigate to the directory:
+   ```
+   cd waybak
+   ```
+3. Make the script executable:
+   ```
+   chmod +x waybak.sh
+   ```
+
+4. Run the script with:
+   ```
+   sudo ./waybak.sh
+   ```
+
+5. Set the backup directory and Waydroid username via the menu options before using the backup or restore functionality.
+
 ## Usage
 
 ### Main Menu Options
