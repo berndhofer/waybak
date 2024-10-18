@@ -1,132 +1,171 @@
-# WayBak - Waydroid Backup & Restore Utility
+# Waybak - Simple Waydroid Backup and Restore Tool
 
-WayBak is a utility script designed for backing up and restoring Waydroid data. The script allows you to:
-- Create compressed backups of Waydroid's important directories.
-- Restore Waydroid from a selected backup.
-- Manage backup settings (backup directory and Waydroid username).
+**Waybak** is a simple and minimalistic Bash script designed to help you easily back up and restore your Waydroid data. It provides a straightforward menu interface with essential prompts to guide you through the backup and restore processes.
 
 ## Features
-- Back up Waydroid's local, var, and etc directories to a specified backup directory.
-- Automatically generates unique backup filenames based on the date and time.
-- Restores from a list of available backups.
-- Allows you to set and update the backup directory and Waydroid username.
-- Cleans up Waydroid directories (optional) before restoring.
+
+- **Backup Waydroid Data**: Creates a compressed backup of your Waydroid data directories.
+- **Restore Waydroid Data**: Restores your Waydroid data from a selected backup.
+- **User-Friendly Menu**: Provides a simple menu for easy navigation.
+- **Safe Operations**: Includes confirmations to prevent accidental data loss.
+- **Minimal Dependencies**: Relies on standard Linux commands and utilities.
 
 ## Requirements
-- Waydroid must be installed and set up on your system.
-- Root permissions are required to perform the backup and restore operations.
 
-## Setup
-1. Clone the repository:
-   ```
+- **Operating System**: Linux (with Bash shell)
+- **Waydroid**: Installed and configured
+- **Bash**: Version supporting `select` and `read` commands
+- **Permissions**: Ability to run `sudo` commands
+
+## Installation
+
+1. **Download the Script**
+
+   Clone the repository from GitHub:
+
+   ```bash
    git clone https://github.com/berndhofer/waybak.git
    ```
-2. Navigate to the directory:
+
+   Alternatively, you can download the `waybak.sh` script directly:
+
+   ```bash
+   wget -O waybak.sh https://github.com/berndhofer/waybak/raw/main/waybak.sh
    ```
-   cd waybak
-   ```
-3. Make the script executable:
-   ```
+
+2. **Make the Script Executable**
+
+   ```bash
    chmod +x waybak.sh
    ```
 
-4. Run the script with:
-   ```
-   sudo ./waybak.sh
+3. **(Optional) Move the Script to a Directory in Your PATH**
+
+   To run the script from any location, you can move it to `/usr/local/bin`:
+
+   ```bash
+   sudo mv waybak.sh /usr/local/bin/waybak
    ```
 
-5. Set the backup directory and Waydroid username via the menu options before using the backup or restore functionality.
+   > **Note**: Moving the script requires `sudo` privileges.
 
 ## Usage
 
-### Main Menu Options
-When you run the script without any arguments, you will be presented with a menu:
+Run the script from the terminal:
+
+```bash
+./waybak.sh
+```
+
+If you moved the script to a directory in your `PATH`, you can run it directly:
+
+```bash
+waybak
+```
+
+### Main Menu
+
+Upon running the script, you'll see the following menu:
 
 ```
-===== WayBak Menu =====
+Waybak - Simple Waydroid Backup and Restore Tool
+-----------------------------------------------
 1) Backup
 2) Restore
-----
-Optional Settings:
-3) Set Backup Directory [current: /your/backup/directory]
-4) Set Username [current: your_username]
-5) Help
-6) Exit
+3) Exit
+Enter your choice [1-3]:
 ```
 
-- **Backup**: Create a new backup of your Waydroid data. The script will generate a backup tarball in the specified backup directory.
-- **Restore**: Restore Waydroid from a selected backup tarball.
-- **Set Backup Directory**: Change the directory where backups will be saved. If no directory is set, the default is `./backups`.
-- **Set Username**: Set the Waydroid username (used to determine the path to Waydroid's local data).
-- **Help**: Display usage information.
-- **Exit**: Exit the script.
+Enter the number corresponding to the action you wish to perform.
 
-### Prerequisites
-Before using the **Backup** and **Restore** options, make sure that both the **Backup Directory** and **Username** are set. You can configure these settings via options 3 and 4 in the menu.
+### Backup Waydroid Data
 
-### Backup Process
-1. Choose option `1) Backup` from the menu.
-2. A unique backup filename will be generated (e.g., `waybak_2024-10-12_14-10-48.tar.gz`).
-3. You will be prompted to either keep the generated filename or input a new one. You don't need to include the `.tar.gz` extension manually.
-4. The script will create a backup tarball in the configured backup directory, compressing Waydroid's data directories.
+1. **Select Option 1**: Enter `1` and press `Enter`.
+2. **Backup Process**:
+   - The script will stop any running Waydroid session.
+   - It will create a backup of the Waydroid data directories.
+   - The backup is saved as a compressed `.tar.gz` file in the `backups` directory located in the same directory as the script.
+3. **Completion**: You'll receive a confirmation message once the backup is completed.
 
-### Restore Process
-1. Choose option `2) Restore` from the menu.
-2. A list of available backup files in the backup directory will be displayed.
-3. Select the backup you want to restore.
-4. You will be prompted if you want to clean up existing Waydroid files before restoring.
-5. The selected backup will be restored, and Waydroid will be reconfigured with the restored data.
+### Restore Waydroid Data
 
-### Set Backup Directory
-1. Choose option `3) Set Backup Directory`.
-2. The current backup directory (if set) will be displayed. You can edit it or provide a new directory path.
-3. If the directory does not exist, you will be asked if you want to create it.
-4. The backup directory will be updated and saved in the configuration.
+1. **Select Option 2**: Enter `2` and press `Enter`.
+2. **Select a Backup**:
+   - The script will display a numbered list of available backups.
+   - Example:
+     ```
+     Available backups:
+     1) /path/to/waybak/backups/waydroid_backup_20231014_123456.tar.gz
+     2) /path/to/waybak/backups/waydroid_backup_20231013_101112.tar.gz
+     ```
+   - Enter the number corresponding to the backup you wish to restore.
+3. **Confirm Restore**:
+   - You'll be prompted to confirm the restore operation:
+     ```
+     This will overwrite your current Waydroid data. Are you sure? (y/n):
+     ```
+   - Enter `y` to proceed or `n` to cancel.
+   - If you enter an invalid input, the script will prompt you again.
+4. **Restore Process**:
+   - The script will clean the existing Waydroid data directories (files within directories are deleted, directories remain).
+   - It will extract the selected backup to restore your data.
+5. **Completion**: You'll receive a confirmation message once the restore is completed.
 
-### Set Username
-1. Choose option `4) Set Username`.
-2. The current username (if set) will be displayed. You can edit it or provide a new username.
-3. The script will check if the corresponding Waydroid directory exists (`/home/your_username/.local/share/waydroid`). If the directory does not exist, you will be warned and prompted to enter a valid username.
+### Exit
 
-## Command-Line Usage
+- **Select Option 3**: Enter `3` and press `Enter` to exit the script.
 
-The script also supports command-line options:
+## Configuration
 
-```
-./waybak.sh [OPTIONS]
+### Backup Directory
 
-Options:
-  -b, --backup                Perform a backup
-  -r, --restore               Perform a restore
-      --set-dir <directory>   Set a new backup directory
-      --set-username <name>   Set a new username for Waydroid
-  -h, --help                  Display this help message
-```
+- **Default Location**: Backups are stored in the `backups` directory located in the same directory as the script.
+- **Changing the Backup Directory**:
+  - You can modify the `BACKUP_DIR` variable at the top of the script to change the backup directory.
+  - Example:
+    ```bash
+    BACKUP_DIR="/path/to/your/desired/backup/location"
+    ```
 
-### Examples:
+### Waydroid Data Directories
 
-1. **Backup Waydroid**:
-   ```
-   sudo ./waybak.sh --backup
-   ```
+- The script backs up and restores the following Waydroid data directories by default:
+  - User data: `$HOME/.local/share/waydroid`
+  - System data: `/var/lib/waydroid`
+  - Images: `/etc/waydroid-extra/images`
+- **Custom Directories**:
+  - If your Waydroid installation uses different directories, modify the corresponding variables in the script:
+    ```bash
+    WAYDROID_USER_HOME="/your/custom/path"
+    WAYDROID_VAR="/your/custom/path"
+    WAYDROID_ETC="/your/custom/path"
+    ```
 
-2. **Restore Waydroid**:
-   ```
-   sudo ./waybak.sh --restore
-   ```
+## Important Notes
 
-3. **Set a new backup directory**:
-   ```
-   ./waybak.sh --set-dir /path/to/new/backup_directory
-   ```
+- **Data Overwrite Warning**: Restoring a backup will overwrite your current Waydroid data. Ensure that you have backed up any important data before proceeding.
+- **Permissions**: The script uses `sudo` for operations that require elevated privileges. Make sure you have `sudo` access.
+- **Waydroid Session**: The script stops the Waydroid session before performing backup or restore operations to prevent data corruption.
 
-4. **Set a new username**:
-   ```
-   ./waybak.sh --set-username new_username
-   ```
+## Troubleshooting
 
-### Notes
-- Both the backup directory and username must be set before running backup or restore.
-- The backup tarballs are automatically compressed as `.tar.gz` files.
-- Make sure to run the script with `sudo` since root permissions are required for the backup and restore operations.
+- **Waydroid Not Installed**: If you receive an error stating that Waydroid is not installed, install Waydroid first before using this script.
+- **No Backups Found**: If no backups are found during restore, ensure that you have previously created backups and that they are located in the correct backup directory.
+- **Script Errors**: Ensure that you have the necessary permissions and that all paths specified in the script are correct.
+
+## License
+
+This script is provided as-is without any warranty. Use it at your own risk.
+
+## Contributing
+
+Feel free to modify the script to suit your needs or contribute improvements.
+
+## Acknowledgements
+
+- **Waydroid**: Thanks to the Waydroid project for enabling Android environments on Linux systems.
+
+---
+
+**Disclaimer**: This script is a simple helper tool intended for personal use. Always exercise caution when performing backup and restore operations, especially when dealing with system-level data.
 
